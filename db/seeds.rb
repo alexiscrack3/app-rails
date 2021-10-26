@@ -27,9 +27,17 @@ User.create!(name: 'asdf',
   )
 end
 
-# Generate microposts for a subset of users.
+# generate microposts for a subset of users
 users = User.order(:created_at).take(6)
 50.times do
   content = Faker::Lorem.sentence(word_count: 5)
   users.each { |user| user.microposts.create!(content: content) }
 end
+
+# create following relationships
+users = User.all
+user  = users.first
+following = users[2..50]
+followers = users[3..40]
+following.each { |followed| user.follow(followed) }
+followers.each { |follower| follower.follow(user) }
